@@ -1,6 +1,6 @@
 # ImageOptimizer
 
-This gem allows you to simply optimize images via jpegoptim or optipng.
+This gem allows you to simply optimize images via jpegoptim or OptiPNG.
 
 Tested against ruby 1.8.7, 1.9.2, 1.9.3, ruby-head, jruby-18mode, jruby-19mode, jruby-head, rbx-18mode, rbx-19mode, and
 ree
@@ -12,21 +12,51 @@ ree
 
 ## Installation
 
-Add this line to your application's Gemfile:
+##### This gem uses the following utilities for optimizing images:
+    
+1. jpegoptim, which can be installed from [freecode.com](http://freecode.com/projects/jpegoptim)
+
+2. OptiPNG, which can be installed from [sourceforge.net](http://optipng.sourceforge.net/)
+
+Or install the utilities via homebrew: 
+
+```bash
+$ brew install optipng jpegoptim
+```
+
+Then add this line to your application's Gemfile:
 
     gem 'image_optimizer'
 
 And then execute:
 
-    $ bundle
+```bash
+$ bundle
+```   
 
 Or install it yourself as:
-
-    $ gem install image_optimizer
+```bash
+$ gem install image_optimizer
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+#### Optimize PNG or GIF formats:
+
+OptiPNG is a PNG optimizer that recompresses image files to a smaller size without losing any information and
+performs PNG integrity checks and corrections.
+
+```ruby
+ImageOptimizer.new('path/to/file.png').optimize
+```
+
+#### Optimize JPEG formats:
+
+jpegoptim provides lossless optimization for JPEG files based on optimizing the Huffman tables.
+
+```ruby
+ImageOptimizer.new('path/to/file.jpg').optimize
+```
 
 ## Contributing
 

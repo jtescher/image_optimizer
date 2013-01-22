@@ -1,3 +1,3 @@
-module ImageOptimizer
+class ImageOptimizer
   VERSION = "0.0.1"
 end

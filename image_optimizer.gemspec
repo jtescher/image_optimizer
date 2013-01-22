@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Julian Tescher"]
   gem.email         = ["jatescher@gmail.com"]
   gem.description   = %q{A simple image optimizer}
-  gem.summary       = %q{Simply optimize images via jpegoptim or optipng}
+  gem.summary       = %q{Simply optimize images via jpegoptim or OptiPNG}
   gem.homepage      = "https://github.com/jtescher/image_optimizer"
 
   gem.files         = `git ls-files`.split($/)
