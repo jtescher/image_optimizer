@@ -16,5 +16,11 @@ describe ImageOptimizer::PNGOptimizer do
       png_optimizer.should_receive(:warn).with('Attempting to optimize a png without optipng installed. Skipping...')
       png_optimizer.optimize
     end
+
+    it 'detects if there is an ENV variable path to optipng' do
+      png_optimizer.stub(:image_optim_bin_present? => true)
+      png_optimizer.should_receive(:optimize_png_with_image_optim_bin)
+      png_optimizer.optimize
+    end
   end
 end

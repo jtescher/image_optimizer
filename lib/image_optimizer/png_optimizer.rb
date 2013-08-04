@@ -9,7 +9,9 @@ class ImageOptimizer
     def optimize
       return unless png_format?
 
-      if png_optimizer_present?
+      if image_optim_bin_present?
+        optimize_png_with_image_optim_bin
+      elsif png_optimizer_present?
         optimize_png
       else
         warn 'Attempting to optimize a png without optipng installed. Skipping...'
@@ -32,6 +34,14 @@ class ImageOptimizer
 
     def png_optimizer_present?
       `which optipng` && $?.success?
+    end
+
+    def image_optim_bin_present?
+      ENV['OPTIPNG_BIN'] != nil
+    end
+
+    def optimize_png_with_image_optim_bin
+      system "#{ENV['OPTIPNG_BIN']} -o7 #{path}"
     end
 
   end
