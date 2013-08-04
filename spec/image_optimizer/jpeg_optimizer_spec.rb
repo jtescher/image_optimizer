@@ -16,5 +16,11 @@ describe ImageOptimizer::JPEGOptimizer do
       jpeg_optimizer.should_receive(:warn).with('Attempting to optimize a jpeg without jpegoptim installed. Skipping...')
       jpeg_optimizer.optimize
     end
+
+    it 'detects if there is an ENV variable path to jpegoptim' do
+      jpeg_optimizer.stub(:image_optim_bin_present? => true)
+      jpeg_optimizer.should_receive(:optimize_jpeg_with_image_optim_bin)
+      jpeg_optimizer.optimize
+    end
   end
 end

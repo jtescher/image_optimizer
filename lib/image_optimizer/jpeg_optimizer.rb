@@ -9,7 +9,9 @@ class ImageOptimizer
     def optimize
       return unless jpeg_format?
 
-      if jpeg_optimizer_present?
+      if image_optim_bin_present?
+        optimize_jpeg_with_image_optim_bin
+      elsif jpeg_optimizer_present?
         optimize_jpeg
       else
         warn 'Attempting to optimize a jpeg without jpegoptim installed. Skipping...'
@@ -32,6 +34,14 @@ class ImageOptimizer
 
     def jpeg_optimizer_present?
       `which jpegoptim` && $?.success?
+    end
+
+    def image_optim_bin_present?
+      ENV['JPEGOPTIM_BIN'] != nil
+    end
+
+    def optimize_jpeg_with_image_optim_bin
+      system "#{ENV['JPEGOPTIM_BIN']} -f --strip-all #{path}"
     end
 
   end
