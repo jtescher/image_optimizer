@@ -7,8 +7,11 @@ ree
 
 [![Build Status](https://secure.travis-ci.org/jtescher/image_optimizer.png)]
 (http://travis-ci.org/jtescher/image_optimizer)
-[![Dependency Status](https://gemnasium.com/jtescher/image_optimizer.png)](https://gemnasium.com/jtescher/image_optimizer)
+[![Dependency Status](https://gemnasium.com/jtescher/image_optimizer.png)]
+(https://gemnasium.com/jtescher/image_optimizer)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/jtescher/image_optimizer)
+[![Coverage Status](https://coveralls.io/repos/jtescher/image_optimizer/badge.png)]
+(https://coveralls.io/r/jtescher/image_optimizer)
 
 ## Installation
 
