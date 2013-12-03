@@ -1,9 +1,11 @@
 class ImageOptimizer
   class JPEGOptimizer
     attr_reader :path
+    attr_reader :quality
 
-    def initialize(path)
+    def initialize(path, quality=-1)
       @path = path
+      @quality = quality
     end
 
     def optimize
@@ -27,8 +29,14 @@ class ImageOptimizer
     end
 
     def optimize_jpeg
-      system "#{jpeg_optimizer_bin} -f --strip-all #{path}"
-    end
+      if quality < 0
+        system "#{jpeg_optimizer_bin} -f --strip-all --all-progressive #{path}"
+      elsif quality > 100
+        warn 'Quality setting must be between 0 and 100, or negative for lossless optimization'
+      else
+        system "#{jpeg_optimizer_bin} -f --strip-all --max=#{quality} --all-progressive #{path}"
+      end
+    end  
 
     def jpeg_optimizer_present?
       !jpeg_optimizer_bin.nil? && !jpeg_optimizer_bin.empty?

@@ -55,11 +55,20 @@ ImageOptimizer.new('path/to/file.png').optimize
 
 #### Optimize JPEG formats:
 
-jpegoptim provides lossless optimization for JPEG files based on optimizing the Huffman tables.
+jpegoptim provides lossless optimization for JPEG files based on optimizing the Huffman tables. all jpegs will be progressively optimized for a better web experience
 
 ```ruby
 ImageOptimizer.new('path/to/file.jpg').optimize
 ```
+
+##### Lossy JPEG optimization
+
+Pass an optional 'quality' parameter to target a specific JPG quality level (0-100), or pass -1 for lossless optimization. PNGs will ignore the quality setting
+
+```ruby
+ImageOptimizer.new('path/to/file.jpg', 80).optimize
+```
+
 
 ## Contributing
 
