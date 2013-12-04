@@ -2,16 +2,18 @@
 
 This gem allows you to simply optimize images via jpegoptim or OptiPNG.
 
-Tested against ruby 1.8.7, 1.9.2, 1.9.3, ruby-head, jruby-18mode, jruby-19mode, jruby-head, rbx-18mode, rbx-19mode, and
-ree
+Tested against ruby 1.8.7, 1.9.2, 1.9.3, 2.0.0, ruby-head, jruby-18mode, jruby-19mode, jruby-head, rbx-18mode,
+rbx-19mode, and ree
 
 [![Build Status](https://secure.travis-ci.org/jtescher/image_optimizer.png)]
 (http://travis-ci.org/jtescher/image_optimizer)
 [![Dependency Status](https://gemnasium.com/jtescher/image_optimizer.png)]
 (https://gemnasium.com/jtescher/image_optimizer)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/jtescher/image_optimizer)
+[![Code Climate](https://codeclimate.com/github/jtescher/image_optimizer.png)]
+(https://codeclimate.com/github/jtescher/image_optimizer)
 [![Coverage Status](https://coveralls.io/repos/jtescher/image_optimizer/badge.png)]
 (https://coveralls.io/r/jtescher/image_optimizer)
+[![Gem Version](https://badge.fury.io/rb/image_optimizer.png)](http://badge.fury.io/rb/image_optimizer)
 
 ## Installation
 
@@ -55,7 +57,8 @@ ImageOptimizer.new('path/to/file.png').optimize
 
 #### Optimize JPEG formats:
 
-jpegoptim provides lossless optimization for JPEG files based on optimizing the Huffman tables. all jpegs will be progressively optimized for a better web experience
+jpegoptim provides lossless optimization for JPEG files based on optimizing the Huffman tables.
+All jpegs will be progressively optimized for a better web experience
 
 ```ruby
 ImageOptimizer.new('path/to/file.jpg').optimize
@@ -63,10 +66,11 @@ ImageOptimizer.new('path/to/file.jpg').optimize
 
 ##### Lossy JPEG optimization
 
-Pass an optional 'quality' parameter to target a specific JPG quality level (0-100), or pass -1 for lossless optimization. PNGs will ignore the quality setting
+Pass an optional `quality` parameter to target a specific lossy JPG quality level (0-100), default is lossless
+optimization. PNGs will ignore the quality setting.
 
 ```ruby
-ImageOptimizer.new('path/to/file.jpg', 80).optimize
+ImageOptimizer.new('path/to/file.jpg', quality: 80).optimize
 ```
 
 
