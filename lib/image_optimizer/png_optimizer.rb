@@ -23,7 +23,7 @@ class ImageOptimizer
     end
 
     def extension(path)
-      path.split(".").last.downcase
+      path.split('.').last.downcase
     end
 
     def optimize_png

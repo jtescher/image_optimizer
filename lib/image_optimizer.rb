@@ -1,18 +1,17 @@
-require "image_optimizer/version"
-require "image_optimizer/jpeg_optimizer"
-require "image_optimizer/png_optimizer"
+require 'image_optimizer/version'
+require 'image_optimizer/jpeg_optimizer'
+require 'image_optimizer/png_optimizer'
 
 class ImageOptimizer
-  attr_reader :path
-  attr_reader :quality
+  attr_reader :path, :options
 
-  def initialize(path, quality=-1)
-    @path = path
-    @quality = quality
+  def initialize(path, options = {})
+    @path    = path
+    @options = options
   end
 
   def optimize
-    JPEGOptimizer.new(path, quality).optimize
+    JPEGOptimizer.new(path, options).optimize
     PNGOptimizer.new(path).optimize
   end
 end
