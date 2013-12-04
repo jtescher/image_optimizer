@@ -27,7 +27,7 @@ describe ImageOptimizer::JPEGOptimizer do
     end
 
     it 'accepts an optional quality parameter' do
-      jpeg_optimizer = ImageOptimizer::JPEGOptimizer.new(file_path, quality: 50)
+      jpeg_optimizer = ImageOptimizer::JPEGOptimizer.new(file_path, :quality => 50)
       jpeg_optimizer.stub(:jpeg_optimizer_bin => '/usr/local/bin/jpegoptim')
       optimizer_options = '-f --strip-all --max=50 --all-progressive'
       jpeg_optimizer.should_receive(:system).with("/usr/local/bin/jpegoptim #{optimizer_options} #{file_path}")
