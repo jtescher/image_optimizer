@@ -12,6 +12,6 @@ class ImageOptimizer
 
   def optimize
     JPEGOptimizer.new(path, options).optimize
-    PNGOptimizer.new(path).optimize
+    PNGOptimizer.new(path, options).optimize
   end
 end

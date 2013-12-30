@@ -64,6 +64,17 @@ All jpegs will be progressively optimized for a better web experience
 ImageOptimizer.new('path/to/file.jpg').optimize
 ```
 
+## Optimization Options
+
+##### Quiet optimization
+
+To have optimization performed in quiet mode without logging progress, an optional `quiet` parameter may be passed.
+Default is false.
+
+```ruby
+ImageOptimizer.new('path/to/file.jpg', quiet: true).optimize
+```
+
 ##### Lossy JPEG optimization
 
 Pass an optional `quality` parameter to target a specific lossy JPG quality level (0-100), default is lossless

@@ -1,10 +1,10 @@
 class ImageOptimizer
   class JPEGOptimizer
-    attr_reader :path, :quality
+    attr_reader :path, :options
 
     def initialize(path, options = {})
       @path = path
-      @quality = options[:quality]
+      @options = options
     end
 
     def optimize
@@ -28,11 +28,22 @@ class ImageOptimizer
     end
 
     def optimize_jpeg
-      system "#{jpeg_optimizer_bin} -f --strip-all #{optional_max_quality} --all-progressive #{path}"
+      system(jpeg_optimizer_bin, *command_options)
     end
 
-    def optional_max_quality
-      "--max=#{quality}" if (0..100).include?(quality)
+    def command_options
+      flags = ['-f', '--strip-all', '--all-progressive']
+      flags << max_quantity if (0..100).include?(options[:quality])
+      flags << quiet if options[:quiet]
+      flags << path
+    end
+
+    def max_quantity
+      "--max=#{options[:quality]}"
+    end
+
+    def quiet
+      '--quiet'
     end
 
     def jpeg_optimizer_present?

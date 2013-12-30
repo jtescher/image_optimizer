@@ -1,9 +1,10 @@
 class ImageOptimizer
   class PNGOptimizer
-    attr_reader :path
+    attr_reader :path, :options
 
-    def initialize(path)
+    def initialize(path, options = {})
       @path = path
+      @options = options
     end
 
     def optimize
@@ -27,7 +28,17 @@ class ImageOptimizer
     end
 
     def optimize_png
-      system "#{png_optimizer_bin} -o7 #{path}"
+      system(png_optimizer_bin, *command_options)
+    end
+
+    def command_options
+      flags = %w[-o7]
+      flags << quiet if options[:quiet]
+      flags << path
+    end
+
+    def quiet
+      '-quiet'
     end
 
     def png_optimizer_present?
