@@ -2,32 +2,53 @@ require 'spec_helper'
 
 describe ImageOptimizer::PNGOptimizer do
   describe '#optimize' do
-    let(:png_optimizer) { ImageOptimizer::PNGOptimizer.new('/path/to/file.png') }
+    let(:options) { {} }
+    let(:png_optimizer) { ImageOptimizer::PNGOptimizer.new('/path/to/file.png', options) }
+    subject { png_optimizer.optimize }
 
-    it 'optimizes the png' do
-      png_optimizer.stub(:bin => '/usr/local/bin/optipng')
-      png_optimizer.should_receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
-      png_optimizer.optimize
+    context 'with png optimizing utility installed' do
+      before do
+        allow(png_optimizer).to receive(:run_command).and_return('/usr/local/bin/optipng')
+      end
+
+      it 'optimizes the png' do
+        expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
+        subject
+      end
+
+      context 'ENV variable path to optipng' do
+        let(:image_optim_optipng_bin_path) { '/app/vendor/bundle/ruby/2.0.0/gems/image_optim_bin-0.0.2/bin/optipng' }
+        before do
+          ENV['OPTIPNG_BIN'] = image_optim_optipng_bin_path
+        end
+        after do
+          ENV['OPTIPNG_BIN'] = nil
+        end
+
+        it 'detects if there is an ENV variable path to optipng' do
+          expect(png_optimizer).to receive(:system).with(image_optim_optipng_bin_path, '-o7', '/path/to/file.png')
+          subject
+        end
+      end
+
+      context 'with quiet parameter' do
+        let(:options) { { :quiet => true } }
+        it 'optimizes the png' do
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-quiet', '/path/to/file.png')
+          subject
+        end
+      end
     end
 
-    it 'warns the user if the png optimizing utility is not installed' do
-      png_optimizer.stub(:bin => '')
-      png_optimizer.should_receive(:warn).with('Attempting to optimize a png without optipng installed. Skipping...')
-      png_optimizer.optimize
-    end
+    context 'with png optimizing utility not installed' do
+      before do
+        allow(png_optimizer).to receive(:run_command).and_return('')
+      end
 
-    it 'detects if there is an ENV variable path to optipng' do
-      image_optim_optipng_bin_path = '/app/vendor/bundle/ruby/2.0.0/gems/image_optim_bin-0.0.2/bin/optipng'
-      ENV['OPTIPNG_BIN'] = image_optim_optipng_bin_path
-      png_optimizer.should_receive(:system).with(image_optim_optipng_bin_path, '-o7', '/path/to/file.png')
-      png_optimizer.optimize
-    end
-
-    it 'accepts an optional quiet parameter' do
-      png_optimizer = ImageOptimizer::PNGOptimizer.new('/path/to/file.png', :quiet => true)
-      png_optimizer.stub(:bin => '/usr/local/bin/optipng')
-      png_optimizer.should_receive(:system).with('/usr/local/bin/optipng', '-o7', '-quiet', '/path/to/file.png')
-      png_optimizer.optimize
+      it 'warns the user' do
+        expect(png_optimizer).to receive(:warn).with('Attempting to optimize a png without optipng installed. Skipping...')
+        subject
+      end
     end
   end
 end

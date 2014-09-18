@@ -2,43 +2,67 @@ require 'spec_helper'
 
 describe ImageOptimizer::JPEGOptimizer do
   describe '#optimize' do
-    let(:jpeg_optimizer) { ImageOptimizer::JPEGOptimizer.new('/path/to/file.jpg') }
+    let(:options) { {} }
+    let(:jpeg_optimizer) { ImageOptimizer::JPEGOptimizer.new('/path/to/file.jpg', options) }
+    subject { jpeg_optimizer.optimize }
 
-    it 'optimizes the jpeg' do
-      jpeg_optimizer.stub(:bin => '/usr/local/bin/jpegoptim')
-      optimizer_options = %w[-f --strip-all --all-progressive /path/to/file.jpg]
-      jpeg_optimizer.should_receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
-      jpeg_optimizer.optimize
+    context 'jpeg optimizing utility is installed' do
+      before do
+        allow(jpeg_optimizer).to receive(:run_command).and_return('/usr/local/bin/jpegoptim')
+      end
+
+      it 'optimizes the jpeg' do
+        optimizer_options = %w[-f --strip-all --all-progressive /path/to/file.jpg]
+        expect(jpeg_optimizer).to receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
+        subject
+      end
+
+      context 'ENV variable path to jpegoptim' do
+        let(:image_optim_jpegoptim_bin_path) { '/app/vendor/bundle/ruby/2.0.0/gems/image_optim_bin-0.0.2/bin/jpegoptim' }
+        before do
+          ENV['JPEGOPTIM_BIN'] = image_optim_jpegoptim_bin_path
+        end
+        after do
+          ENV['JPEGOPTIM_BIN'] = nil
+        end
+
+        it 'should optimize using the given path' do
+          optimizer_options = %w[-f --strip-all --all-progressive /path/to/file.jpg]
+          expect(jpeg_optimizer).to receive(:system).with(image_optim_jpegoptim_bin_path, *optimizer_options)
+          subject
+        end
+      end
+
+      context 'with quality parameter' do
+        let(:options) { { :quality => 50 } }
+
+        it 'optimizes the jpeg with the quality' do
+          optimizer_options = %w[-f --strip-all --all-progressive --max=50 /path/to/file.jpg]
+          expect(jpeg_optimizer).to receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
+          subject
+        end
+      end
+
+      context 'with quiet parameter' do
+        let(:options) { { :quiet => true } }
+
+        it 'accepts an optional quiet parameter' do
+          optimizer_options = %w[-f --strip-all --all-progressive --quiet /path/to/file.jpg]
+          expect(jpeg_optimizer).to receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
+          subject
+        end
+      end
     end
 
-    it 'warns the user if the jpeg optimizing utility is not installed' do
-      jpeg_optimizer.stub(:bin => '')
-      jpeg_optimizer.should_receive(:warn).with('Attempting to optimize a jpeg without jpegoptim installed. Skipping...')
-      jpeg_optimizer.optimize
-    end
+    context 'optimizing utility is not installed' do
+      before do
+        allow(jpeg_optimizer).to receive(:bin).and_return('')
+      end
 
-    it 'detects if there is an ENV variable path to jpegoptim' do
-      image_optim_jpegoptim_bin_path = '/app/vendor/bundle/ruby/2.0.0/gems/image_optim_bin-0.0.2/bin/jpegoptim'
-      ENV['JPEGOPTIM_BIN'] = image_optim_jpegoptim_bin_path
-      optimizer_options = %w[-f --strip-all --all-progressive /path/to/file.jpg]
-      jpeg_optimizer.should_receive(:system).with(image_optim_jpegoptim_bin_path, *optimizer_options)
-      jpeg_optimizer.optimize
-    end
-
-    it 'accepts an optional quality parameter' do
-      jpeg_optimizer = ImageOptimizer::JPEGOptimizer.new('/path/to/file.jpg', :quality => 50)
-      jpeg_optimizer.stub(:bin => '/usr/local/bin/jpegoptim')
-      optimizer_options = %w[-f --strip-all --all-progressive --max=50 /path/to/file.jpg]
-      jpeg_optimizer.should_receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
-      jpeg_optimizer.optimize
-    end
-
-    it 'accepts an optional quiet parameter' do
-      jpeg_optimizer = ImageOptimizer::JPEGOptimizer.new('/path/to/file.jpg', :quiet => true)
-      jpeg_optimizer.stub(:bin => '/usr/local/bin/jpegoptim')
-      optimizer_options = %w[-f --strip-all --all-progressive --quiet /path/to/file.jpg]
-      jpeg_optimizer.should_receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
-      jpeg_optimizer.optimize
+      it 'warns the user if the jpeg' do
+        expect(jpeg_optimizer).to receive(:warn).with('Attempting to optimize a jpeg without jpegoptim installed. Skipping...')
+        subject
+      end
     end
   end
 end
