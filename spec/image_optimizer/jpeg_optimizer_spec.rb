@@ -8,7 +8,7 @@ describe ImageOptimizer::JPEGOptimizer do
 
     context 'jpeg optimizing utility is installed' do
       before do
-        allow(jpeg_optimizer).to receive(:run_command).and_return('/usr/local/bin/jpegoptim')
+        allow(jpeg_optimizer).to receive(:which).and_return('/usr/local/bin/jpegoptim')
       end
 
       it 'optimizes the jpeg' do
@@ -56,7 +56,7 @@ describe ImageOptimizer::JPEGOptimizer do
 
     context 'optimizing utility is not installed' do
       before do
-        allow(jpeg_optimizer).to receive(:bin).and_return('')
+        allow(jpeg_optimizer).to receive(:which).and_return('')
       end
 
       it 'warns the user if the jpeg' do

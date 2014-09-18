@@ -8,7 +8,7 @@ describe ImageOptimizer::PNGOptimizer do
 
     context 'with png optimizing utility installed' do
       before do
-        allow(png_optimizer).to receive(:run_command).and_return('/usr/local/bin/optipng')
+        allow(png_optimizer).to receive(:which).and_return('/usr/local/bin/optipng')
       end
 
       it 'optimizes the png' do
@@ -42,7 +42,7 @@ describe ImageOptimizer::PNGOptimizer do
 
     context 'with png optimizing utility not installed' do
       before do
-        allow(png_optimizer).to receive(:run_command).and_return('')
+        allow(png_optimizer).to receive(:which).and_return('')
       end
 
       it 'warns the user' do

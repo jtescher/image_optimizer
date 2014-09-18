@@ -1,5 +1,7 @@
 class ImageOptimizer
   class ImageOptimizerBase
+    include Shell
+
     attr_reader :path, :options
 
     def initialize(path, options = {})
@@ -8,7 +10,7 @@ class ImageOptimizer
     end
 
     def optimize
-      return unless correct_format?
+      return unless correct_format?(options[:identify])
 
       if bin_present?
         _optimize
@@ -18,8 +20,8 @@ class ImageOptimizer
     end
 
     private
-    def correct_format?
-      extensions.include? extension(path)
+    def correct_format?(extension=nil)
+      extensions.include? extension || extension(path)
     end
 
     def extension(path)
@@ -36,11 +38,7 @@ class ImageOptimizer
     end
 
     def bin
-      @bin ||= ENV["#{bin_name.upcase}_BIN"] || run_command("which #{bin_name}").strip
-    end
-
-    def run_command(command)
-      `#{command}`
+      @bin ||= ENV["#{bin_name.upcase}_BIN"] || which(bin_name).strip
     end
   end
 end
