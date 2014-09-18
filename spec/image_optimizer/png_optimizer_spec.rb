@@ -5,13 +5,13 @@ describe ImageOptimizer::PNGOptimizer do
     let(:png_optimizer) { ImageOptimizer::PNGOptimizer.new('/path/to/file.png') }
 
     it 'optimizes the png' do
-      png_optimizer.stub(:png_optimizer_bin => '/usr/local/bin/optipng')
+      png_optimizer.stub(:bin => '/usr/local/bin/optipng')
       png_optimizer.should_receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
       png_optimizer.optimize
     end
 
     it 'warns the user if the png optimizing utility is not installed' do
-      png_optimizer.stub(:png_optimizer_bin => '')
+      png_optimizer.stub(:bin => '')
       png_optimizer.should_receive(:warn).with('Attempting to optimize a png without optipng installed. Skipping...')
       png_optimizer.optimize
     end
@@ -25,7 +25,7 @@ describe ImageOptimizer::PNGOptimizer do
 
     it 'accepts an optional quiet parameter' do
       png_optimizer = ImageOptimizer::PNGOptimizer.new('/path/to/file.png', :quiet => true)
-      png_optimizer.stub(:png_optimizer_bin => '/usr/local/bin/optipng')
+      png_optimizer.stub(:bin => '/usr/local/bin/optipng')
       png_optimizer.should_receive(:system).with('/usr/local/bin/optipng', '-o7', '-quiet', '/path/to/file.png')
       png_optimizer.optimize
     end

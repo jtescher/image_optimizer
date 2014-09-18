@@ -1,4 +1,5 @@
 require 'image_optimizer/version'
+require 'image_optimizer/image_optimizer_base'
 require 'image_optimizer/jpeg_optimizer'
 require 'image_optimizer/png_optimizer'
 
