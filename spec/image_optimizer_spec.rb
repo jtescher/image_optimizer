@@ -26,7 +26,7 @@ describe ImageOptimizer do
 
       context 'with #identify_present?' do
         before do
-          allow(image_optimizer).to receive(:identify_present?).and_return(true)
+          allow(image_optimizer).to receive(:which).with('identify').and_return(true)
         end
 
         {
@@ -45,7 +45,7 @@ describe ImageOptimizer do
         }.each do |library, data|
           context "for #{library}" do
             before do
-              allow(image_optimizer).to receive(:image_magick?).and_return(data[:image_magick?])
+              allow(image_optimizer).to receive(:which).with('mogrify').and_return(data[:image_magick?])
               allow(image_optimizer).to receive(:run_command).and_return(data[:output])
             end
 
@@ -63,7 +63,7 @@ describe ImageOptimizer do
 
       context 'with not #identify_present?' do
         before do
-          allow(image_optimizer).to receive(:identify_present?).and_return(false)
+          allow(image_optimizer).to receive(:which).with('identify').and_return(false)
         end
 
         it 'warns the user' do
