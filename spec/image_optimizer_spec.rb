@@ -2,7 +2,14 @@ require 'spec_helper'
 
 describe ImageOptimizer do
   let(:options) { {} }
-  let(:image_optimizer) { ImageOptimizer.new(File.join('/path/to/file.jpg'), options) }
+  let(:image_path) { '/path/to/file.jpg' }
+  let(:image_optimizer) { ImageOptimizer.new(File.join(image_path), options) }
+  after do
+    ImageOptimizer.instance_variable_set(:@image_magick, nil)
+    ImageOptimizer.instance_variable_set(:@identify, nil)
+    ImageOptimizer::JPEGOptimizer.instance_variable_set(:@bin, nil)
+    ImageOptimizer::PNGOptimizer.instance_variable_set(:@bin, nil)
+  end
 
   describe '#optimize' do
     subject { image_optimizer.optimize }
@@ -18,7 +25,7 @@ describe ImageOptimizer do
     subject { image_optimizer.format }
 
     it 'does nothing' do
-      expect(image_optimizer).to_not receive(:identify_present?)
+      expect(ImageOptimizer).to_not receive(:identify_present?)
     end
 
     context 'with identify option' do
@@ -26,7 +33,7 @@ describe ImageOptimizer do
 
       context 'with #identify_present?' do
         before do
-          allow(image_optimizer).to receive(:which).with('identify').and_return(true)
+          allow(ImageOptimizer).to receive(:which).with('identify').and_return(true)
         end
 
         {
@@ -45,7 +52,7 @@ describe ImageOptimizer do
         }.each do |library, data|
           context "for #{library}" do
             before do
-              allow(image_optimizer).to receive(:which).with('mogrify').and_return(data[:image_magick?])
+              allow(ImageOptimizer).to receive(:which).with('mogrify').and_return(data[:image_magick?])
               allow(image_optimizer).to receive(:run_command).and_return(data[:output])
             end
 
@@ -63,7 +70,7 @@ describe ImageOptimizer do
 
       context 'with not #identify_present?' do
         before do
-          allow(image_optimizer).to receive(:which).with('identify').and_return(false)
+          allow(ImageOptimizer).to receive(:which).with('identify').and_return(false)
         end
 
         it 'warns the user' do

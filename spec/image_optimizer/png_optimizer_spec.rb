@@ -4,11 +4,12 @@ describe ImageOptimizer::PNGOptimizer do
   describe '#optimize' do
     let(:options) { {} }
     let(:png_optimizer) { ImageOptimizer::PNGOptimizer.new('/path/to/file.png', options) }
+    after { ImageOptimizer::PNGOptimizer.instance_variable_set(:@bin, nil) }
     subject { png_optimizer.optimize }
 
     context 'with png optimizing utility installed' do
       before do
-        allow(png_optimizer).to receive(:which).and_return('/usr/local/bin/optipng')
+        allow(ImageOptimizer::PNGOptimizer).to receive(:which).and_return('/usr/local/bin/optipng')
       end
 
       it 'optimizes the png' do
@@ -42,7 +43,7 @@ describe ImageOptimizer::PNGOptimizer do
 
     context 'with png optimizing utility not installed' do
       before do
-        allow(png_optimizer).to receive(:which).and_return('')
+        allow(ImageOptimizer::PNGOptimizer).to receive(:which).and_return('')
       end
 
       it 'warns the user' do

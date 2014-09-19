@@ -1,18 +1,6 @@
 class ImageOptimizer
   class JPEGOptimizer < ImageOptimizerBase
     private
-    def type
-      'jpeg'
-    end
-
-    def bin_name
-      'jpegoptim'
-    end
-
-    def extensions
-      %w[jpeg jpg]
-    end
-
     def command_options
       flags = ['-f', '--strip-all', '--all-progressive']
       flags << max_quantity if (0..100).include?(options[:quality])
@@ -26,6 +14,20 @@ class ImageOptimizer
 
     def quiet
       '--quiet'
+    end
+
+    class << self
+      def type
+        'jpeg'
+      end
+
+      def extensions
+        %w[jpeg jpg]
+      end
+
+      def bin_name
+        'jpegoptim'
+      end
     end
   end
 end

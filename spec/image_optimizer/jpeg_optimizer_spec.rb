@@ -4,11 +4,12 @@ describe ImageOptimizer::JPEGOptimizer do
   describe '#optimize' do
     let(:options) { {} }
     let(:jpeg_optimizer) { ImageOptimizer::JPEGOptimizer.new('/path/to/file.jpg', options) }
+    after { ImageOptimizer::JPEGOptimizer.instance_variable_set(:@bin, nil) }
     subject { jpeg_optimizer.optimize }
 
     context 'jpeg optimizing utility is installed' do
       before do
-        allow(jpeg_optimizer).to receive(:which).and_return('/usr/local/bin/jpegoptim')
+        allow(ImageOptimizer::JPEGOptimizer).to receive(:which).and_return('/usr/local/bin/jpegoptim')
       end
 
       it 'optimizes the jpeg' do
@@ -56,7 +57,7 @@ describe ImageOptimizer::JPEGOptimizer do
 
     context 'optimizing utility is not installed' do
       before do
-        allow(jpeg_optimizer).to receive(:which).and_return('')
+        allow(ImageOptimizer::JPEGOptimizer).to receive(:which).and_return('')
       end
 
       it 'warns the user if the jpeg' do
