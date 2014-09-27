@@ -22,8 +22,8 @@ class ImageOptimizer
 
   def format
     if options[:identify]
-      if self.class.identify_present?
-        match = run_command("identify -ping#{quiet} #{path}").match(/PNG|JPG|TIFF|GIF|JPEG/)
+      if self.class.bin?
+        match = run_command("#{self.class.bin} -ping#{quiet} #{path}").match(/PNG|JPG|TIFF|GIF|JPEG/)
         if match
           return match[0].downcase
         end
@@ -45,8 +45,11 @@ class ImageOptimizer
       @image_magick = !!which('mogrify')
     end
 
-    def identify_present?
-      @identify ||= !!which('identify')
+    def bin?
+      !!bin
+    end
+    def bin
+      @identify ||=  ENV['IDENTIFY_BIN'] || which('identify')
     end
   end
 end

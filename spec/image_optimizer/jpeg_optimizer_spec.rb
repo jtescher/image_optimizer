@@ -57,7 +57,7 @@ describe ImageOptimizer::JPEGOptimizer do
 
     context 'optimizing utility is not installed' do
       before do
-        allow(ImageOptimizer::JPEGOptimizer).to receive(:which).and_return('')
+        allow(ImageOptimizer::JPEGOptimizer).to receive(:which).and_return(nil)
       end
 
       it 'warns the user if the jpeg' do
