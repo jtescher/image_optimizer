@@ -43,7 +43,7 @@ describe ImageOptimizer::PNGOptimizer do
 
     context 'with png optimizing utility not installed' do
       before do
-        allow(ImageOptimizer::PNGOptimizer).to receive(:which).and_return('')
+        allow(ImageOptimizer::PNGOptimizer).to receive(:which).and_return(nil)
       end
 
       it 'warns the user' do

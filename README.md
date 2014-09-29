@@ -84,6 +84,19 @@ optimization. PNGs will ignore the quality setting.
 ImageOptimizer.new('path/to/file.jpg', quality: 80).optimize
 ```
 
+##### Use identify
+
+Pass an optional `identify` parameter to identify file types using ImageMagick or GraphicsMagick `identify`
+instead of the filename extension, default is false.
+
+```ruby
+ImageOptimizer.new('path/to/file.jpg', identify: true).optimize
+```
+
+## Set bin directories
+
+Optionally set binary directories with the `OPTIPNG_BIN`, `JPEGOPTIM_BIN` and `IDENTIFY_BIN` environment variables.
+
 
 ## Contributing
 

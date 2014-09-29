@@ -12,7 +12,7 @@ class ImageOptimizer
     def optimize
       return unless correct_format?(options[:identify])
 
-      if self.class.bin_present?
+      if self.class.bin?
         _optimize
       else
         warn "Attempting to optimize a #{self.class.type} without #{self.class.bin_name} installed. Skipping..."
@@ -34,12 +34,11 @@ class ImageOptimizer
 
 
     class << self
-      def bin_present?
-        !bin.nil? && !bin.empty?
+      def bin?
+        !!bin
       end
-
       def bin
-        @bin ||= ENV["#{bin_name.upcase}_BIN"] || which(bin_name).strip
+        @bin ||= ENV["#{bin_name.upcase}_BIN"] || which(bin_name)
       end
     end
   end
