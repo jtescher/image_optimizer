@@ -5,21 +5,21 @@ class TestShell
 end
 
 describe ImageOptimizer::Shell do
+  subject { TestShell.new }
+
   describe '#which' do
     it 'should find ruby' do
-      expect(TestShell.new.which('ruby')).to_not eql nil
+      expect(subject.which('ruby')).to_not be_nil
     end
 
     it 'should not find it' do
-      expect(TestShell.new.which('something_that_should_not_exist_ever')).to eql nil
+      expect(subject.which('something_that_should_not_exist_ever')).to be_nil
     end
   end
 
   describe '#run_command' do
-    subject { TestShell.new.run_command('ruby -v') }
-
     it 'run the command successfully' do
-      expect(subject).to_not eql nil
+      expect(subject.run_command('ruby -v')).to_not be_nil
     end
   end
 end

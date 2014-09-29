@@ -8,48 +8,44 @@ class ImageOptimizer
   include Shell
 
   attr_reader :path, :options
-
   def initialize(path, options = {})
     @path    = path
     @options = options
   end
 
   def optimize
-    options = self.options.merge(:identify => format)
+    identify_format if options[:identify]
     JPEGOptimizer.new(path, options).optimize
     PNGOptimizer.new(path, options).optimize
   end
 
-  def format
-    if options[:identify]
-      if self.class.bin?
-        match = run_command("#{self.class.bin} -ping#{quiet} #{path}").match(/PNG|JPG|TIFF|GIF|JPEG/)
-        if match
-          return match[0].downcase
-        end
-      else
-        warn 'Attempting to retrieve image format without identify installed. Using file name extension instead...'
+private
+
+  def identify_format
+    if identify_bin?
+      match = run_command("#{identify_bin} -ping#{quiet} #{path}").match(/PNG|JPG|TIFF|GIF|JPEG/)
+      if match
+        options[:identified_format] = match[0].downcase
       end
+    else
+      warn 'Attempting to retrieve image format without identify installed. Using file name extension instead...'
     end
-    nil
   end
 
   def quiet
-    if self.class.image_magick?
-      ' -quiet'
-    end
+    ' -quiet' if image_magick?
   end
 
-  class << self
-    def image_magick?
-      @image_magick = !!which('mogrify')
-    end
-
-    def bin?
-      !!bin
-    end
-    def bin
-      @identify ||=  ENV['IDENTIFY_BIN'] || which('identify')
-    end
+  def image_magick?
+    !!which('mogrify')
   end
+
+  def identify_bin?
+    !!identify_bin
+  end
+
+  def identify_bin
+    ENV['IDENTIFY_BIN'] || which('identify')
+  end
+
 end

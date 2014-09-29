@@ -1,6 +1,7 @@
 class ImageOptimizer
   class PNGOptimizer < ImageOptimizerBase
-    private
+
+  private
 
     def command_options
       flags = %w[-o7]
@@ -12,18 +13,17 @@ class ImageOptimizer
       '-quiet'
     end
 
-    class << self
-      def type
-        'png'
-      end
-
-      def extensions
-        %w[png gif]
-      end
-
-      def bin_name
-        'optipng'
-      end
+    def type
+      'png'
     end
+
+    def extensions
+      %w[png gif]
+    end
+
+    def bin_name
+      'optipng'
+    end
+
   end
 end

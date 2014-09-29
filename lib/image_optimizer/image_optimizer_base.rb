@@ -3,43 +3,42 @@ class ImageOptimizer
     include Shell
 
     attr_reader :path, :options
-
     def initialize(path, options = {})
       @path = path
       @options = options
     end
 
     def optimize
-      return unless correct_format?(options[:identify])
+      return unless correct_format?
 
-      if self.class.bin?
-        _optimize
+      if optimizer_bin?
+        perform_optimizations
       else
-        warn "Attempting to optimize a #{self.class.type} without #{self.class.bin_name} installed. Skipping..."
+        warn "Attempting to optimize a #{type} without #{bin_name} installed. Skipping..."
       end
     end
 
-    private
-    def correct_format?(extension=nil)
-      self.class.extensions.include? extension || extension(path)
+  private
+
+    def correct_format?
+      extensions.include?(options[:identified_format] || extension(path))
     end
 
     def extension(path)
       path.split('.').last.downcase
     end
 
-    def _optimize
-      system(self.class.bin, *command_options)
+    def perform_optimizations
+      system(optimizer_bin, *command_options)
     end
 
-
-    class << self
-      def bin?
-        !!bin
-      end
-      def bin
-        @bin ||= ENV["#{bin_name.upcase}_BIN"] || which(bin_name)
-      end
+    def optimizer_bin?
+      !!optimizer_bin
     end
+
+    def optimizer_bin
+      ENV["#{bin_name.upcase}_BIN"] || which(bin_name)
+    end
+
   end
 end

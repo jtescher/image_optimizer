@@ -3,100 +3,127 @@ require 'spec_helper'
 describe ImageOptimizer do
   let(:options) { {} }
   let(:image_path) { '/path/to/file.jpg' }
-  let(:image_optimizer) { ImageOptimizer.new(File.join(image_path), options) }
-  after do
-    ImageOptimizer.instance_variable_set(:@image_magick, nil)
-    ImageOptimizer.instance_variable_set(:@identify, nil)
-    ImageOptimizer::JPEGOptimizer.instance_variable_set(:@bin, nil)
-    ImageOptimizer::PNGOptimizer.instance_variable_set(:@bin, nil)
-  end
 
   describe '#optimize' do
-    subject { image_optimizer.optimize }
+    subject { ImageOptimizer.new(File.join(image_path), options) }
 
     it 'delegates to jpeg and png optimizers' do
       expect_any_instance_of(ImageOptimizer::JPEGOptimizer).to receive(:optimize)
       expect_any_instance_of(ImageOptimizer::PNGOptimizer).to receive(:optimize)
-      subject
+      subject.optimize
     end
   end
 
-  describe '#format' do
-    subject { image_optimizer.format }
+  describe '#identify_format' do
 
-    it 'does nothing' do
-      expect(ImageOptimizer).to_not receive(:identify_present?)
+    context 'with identify option off' do
+      subject { ImageOptimizer.new(File.join(image_path), options) }
+
+      it 'does nothing' do
+        expect(subject).to_not receive(:identify_format)
+        subject.optimize
+      end
     end
 
-    context 'with identify option' do
-      let(:options) { { :identify => true } }
+    context 'with identify option on' do
+      let(:image_magick_data) do
+        {
+          :output => 'rose.jpg JPEG 640x480 sRGB 87kb 0.050u 0:01',
+          :command => " -ping -quiet #{image_path}"
+        }
+      end
+      let(:graphics_magick_data) do
+        {
+          :output => "Image: images/aquarium.jpg\nclass: PseudoClass\ncolors: 256\n" +
+            "signature: eb5dca81dd93ae7e6ffae99a527eb5dca8...\nmatte: False\ngeometry: 640x480\ndepth: 8\nbytes: 308135" +
+            "format: JPEG\ncomments:\nImported from MTV raster image: aquarium.mtv",
+          :command => " -ping #{image_path}"
+        }
+      end
 
-      {
-          true => 'with identify installed globally',
-          false => 'with ENV path to identify'
-      }.each do |install_identify, context_string|
+      subject { ImageOptimizer.new(File.join(image_path), options.merge(:identify => true)) }
 
-        context context_string do
-          if install_identify
-            let(:identify_bin_path) { '/usr/local/bin/identify' }
-            before do
-              allow(ImageOptimizer).to receive(:which).with('identify').and_return(identify_bin_path)
-            end
-          else
-            let(:identify_bin_path) { '~/bin/identify' }
-            before do
-              ENV['IDENTIFY_BIN'] = identify_bin_path
-            end
-            after do
-              ENV['IDENTIFY_BIN'] = nil
-            end
+      context 'with identify found thorough `which`' do
+        let(:identify_bin_path) { '/usr/local/bin/identify' }
+        before { allow(subject).to receive(:which).with('identify').and_return(identify_bin_path) }
+
+        context 'for ImageMagick' do
+          before { allow(subject).to receive(:which).with('mogrify').and_return('/usr/local/bin/mogrify') }
+
+          it 'detects jpegs' do
+            allow(subject).to receive(:run_command).and_return(image_magick_data[:output])
+            subject.optimize
+            expect(subject.options[:identified_format]).to eq('jpeg')
           end
 
-          {
-              'ImageMagick' => {
-                  :image_magick? => '/usr/local/bin/mogrify',
-                  :output => 'rose.jpg JPEG 640x480 sRGB 87kb 0.050u 0:01',
-                  :command => " -ping -quiet /path/to/file.jpg"
-              },
-              'GraphicsMagick' => {
-                  :image_magick? => nil,
-                  :output => "Image: images/aquarium.jpg\nclass: PseudoClass\ncolors: 256\n" +
-                      "signature: eb5dca81dd93ae7e6ffae99a527eb5dca8...\nmatte: False\ngeometry: 640x480\ndepth: 8\nbytes: 308135" +
-                      "format: JPEG\ncomments:\nImported from MTV raster image: aquarium.mtv",
-                  :command => " -ping /path/to/file.jpg"
-              }
-          }.each do |library, data|
-            context "for #{library}" do
-              before do
-                allow(ImageOptimizer).to receive(:which).with('mogrify').and_return(data[:image_magick?])
-                allow(image_optimizer).to receive(:run_command).and_return(data[:output])
-              end
+          it 'calls the correct identify command' do
+            expect(subject).to receive(:run_command).with(identify_bin_path + image_magick_data[:command]).and_return('')
+            subject.optimize
+          end
+        end
 
-              it 'detects jpeg' do
-                expect(subject).to eql 'jpeg'
-              end
+        context 'for GraphicsMagick' do
+          before { allow(subject).to receive(:which).with('mogrify').and_return(nil) }
 
-              it 'calls the right command' do
-                expect(image_optimizer).to receive(:run_command).with(identify_bin_path + data[:command])
-                subject
-              end
-            end
+          it 'detects jpegs' do
+            allow(subject).to receive(:run_command).and_return(graphics_magick_data[:output])
+            subject.optimize
+            expect(subject.options[:identified_format]).to eq('jpeg')
+          end
+
+          it 'calls the correct identify command' do
+            expect(subject).to receive(:run_command).with(identify_bin_path + graphics_magick_data[:command]).and_return('')
+            subject.optimize
+          end
+        end
+      end
+
+      context 'with identify found in ENV' do
+        let(:identify_bin_path) { '~/bin/identify' }
+        before { ENV['IDENTIFY_BIN'] = identify_bin_path }
+        after {  ENV['IDENTIFY_BIN'] = nil}
+
+        context 'for ImageMagick' do
+          before { allow(subject).to receive(:which).with('mogrify').and_return('/usr/local/bin/mogrify') }
+
+          it 'detects jpegs' do
+            allow(subject).to receive(:run_command).and_return(image_magick_data[:output])
+            subject.optimize
+            expect(subject.options[:identified_format]).to eq('jpeg')
+          end
+
+          it 'calls the correct identify command' do
+            expect(subject).to receive(:run_command).with(identify_bin_path + image_magick_data[:command]).and_return('')
+            subject.optimize
+          end
+        end
+
+        context 'for GraphicsMagick' do
+          before { allow(subject).to receive(:which).with('mogrify').and_return(nil) }
+
+          it 'detects jpegs' do
+            allow(subject).to receive(:run_command).and_return(graphics_magick_data[:output])
+            subject.optimize
+            expect(subject.options[:identified_format]).to eq('jpeg')
+          end
+
+          it 'calls the correct identify command' do
+            expect(subject).to receive(:run_command).with(identify_bin_path + graphics_magick_data[:command]).and_return('')
+            subject.optimize
           end
         end
       end
 
       context 'with identify not installed' do
-        before do
-          allow(ImageOptimizer).to receive(:which).with('identify').and_return(nil)
-        end
-
         it 'warns the user' do
-          expect(image_optimizer).
-              to receive(:warn).with('Attempting to retrieve image format without identify installed.' +
+          allow(subject).to receive(:which).with('identify').and_return(nil)
+          allow(subject).to receive(:identify_bin?).and_return(false)
+          expect(subject).to receive(:warn).with('Attempting to retrieve image format without identify installed.' +
                                          ' Using file name extension instead...')
-          subject
+          subject.optimize
         end
       end
+
     end
   end
 end

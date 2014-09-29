@@ -31,5 +31,6 @@ class ImageOptimizer
         `#{command}`
       end
     end
+
   end
 end
