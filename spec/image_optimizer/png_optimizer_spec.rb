@@ -39,7 +39,23 @@ describe ImageOptimizer::PNGOptimizer do
           subject
         end
       end
+
+      context 'without optimization parameter' do
+        it 'optimizes the png with level 7 optimization' do
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
+          subject
+        end
+      end
+
+      context 'with optimization parameter' do
+        let(:options) { { level: 3 } }
+        it 'optimizes the png with the requested optimization level' do
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o3', '/path/to/file.png')
+          subject
+        end
+      end
     end
+
 
     context 'with png optimizing utility not installed' do
       before do

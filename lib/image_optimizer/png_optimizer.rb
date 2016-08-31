@@ -4,9 +4,13 @@ class ImageOptimizer
   private
 
     def command_options
-      flags = %w[-o7]
+      flags = %W[-o#{level}]
       flags << quiet if options[:quiet]
       flags << path
+    end
+
+    def level
+      options[:level] || 7
     end
 
     def quiet
