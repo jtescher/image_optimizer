@@ -84,6 +84,20 @@ optimization. PNGs will ignore the quality setting.
 ImageOptimizer.new('path/to/file.jpg', quality: 80).optimize
 ```
 
+##### Custom PNG optimization quality
+
+By default, `optipng` is called with the `-o7` flag, which controls the level of
+optimization. This default level generates the most optimized results, at the
+expense of very high execution times, so you may want to lower it if your server
+can't handle it.
+
+You can pass an optional `level` parameter to change this value. the JPEG
+optimizer will ignore the value.
+
+```ruby
+ImageOptimizer.new('path/to/file.png', level: 3).optimize
+```
+
 ##### Use identify
 
 Pass an optional `identify` parameter to identify file types using ImageMagick or GraphicsMagick `identify`
