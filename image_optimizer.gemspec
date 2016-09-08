@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/jtescher/image_optimizer"
   gem.license       = 'MIT'
   gem.signing_key   = File.expand_path('~/.ssh/gem-private_key.pem') if $0 =~ /gem\z/
-  gem.cert_chain    = ['certs/jtescher.pem']
+  gem.cert_chain    = ['certs/gem-public_cert.pem']
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
