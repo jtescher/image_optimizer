@@ -13,7 +13,7 @@ describe ImageOptimizer::PNGOptimizer do
       end
 
       it 'optimizes the png' do
-        expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
+        expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-strip all', '/path/to/file.png')
         subject
       end
 
@@ -27,7 +27,7 @@ describe ImageOptimizer::PNGOptimizer do
         end
 
         it 'detects if there is an ENV variable path to optipng' do
-          expect(png_optimizer).to receive(:system).with(image_optim_optipng_bin_path, '-o7', '/path/to/file.png')
+          expect(png_optimizer).to receive(:system).with(image_optim_optipng_bin_path, '-o7', '-strip all', '/path/to/file.png')
           subject
         end
       end
@@ -35,14 +35,14 @@ describe ImageOptimizer::PNGOptimizer do
       context 'with quiet parameter' do
         let(:options) { { :quiet => true } }
         it 'optimizes the png' do
-          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-quiet', '/path/to/file.png')
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-strip all', '-quiet', '/path/to/file.png')
           subject
         end
       end
 
       context 'without optimization parameter' do
         it 'optimizes the png with level 7 optimization' do
-          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-strip all', '/path/to/file.png')
           subject
         end
       end
@@ -50,7 +50,15 @@ describe ImageOptimizer::PNGOptimizer do
       context 'with optimization parameter' do
         let(:options) { { level: 3 } }
         it 'optimizes the png with the requested optimization level' do
-          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o3', '/path/to/file.png')
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o3', '-strip all', '/path/to/file.png')
+          subject
+        end
+      end
+
+      context 'without strip metadata objects parameter' do
+        let(:options) { { strip_metadata: false } }
+        it 'removes the requested metadata objects from the png' do
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '/path/to/file.png')
           subject
         end
       end
