@@ -2,8 +2,7 @@
 
 This gem allows you to simply optimize images via jpegoptim or OptiPNG.
 
-Tested against ruby 1.8.7, 1.9.2, 1.9.3, 2.0.0, 2.1.0, ruby-head, jruby-18mode, jruby-19mode, jruby-head, rbx-2.1.0,
-rbx-2.2.0, and ree
+Tested against ruby 2.0.x, 2.1.x, 2.2.x, 2.3.x, and ruby-head
 
 [![Build Status](https://secure.travis-ci.org/jtescher/image_optimizer.png)]
 (http://travis-ci.org/jtescher/image_optimizer)
