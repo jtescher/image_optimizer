@@ -18,12 +18,12 @@ rbx-2.2.0, and ree
 ## Installation
 
 ##### This gem uses the following utilities for optimizing images:
-    
+
 1. jpegoptim, which can be installed from [freecode.com](http://freecode.com/projects/jpegoptim)
 
 2. OptiPNG, which can be installed from [sourceforge.net](http://optipng.sourceforge.net/)
 
-Or install the utilities via homebrew: 
+Or install the utilities via homebrew:
 
 ```bash
 $ brew install optipng jpegoptim
@@ -96,6 +96,18 @@ optimizer will ignore the value.
 
 ```ruby
 ImageOptimizer.new('path/to/file.png', level: 3).optimize
+```
+
+##### Don't Remove metadata from PNG
+
+By default, `optipng` is called with the `-strip all` flag, which removes all the
+level of metadata. This default generates the most optimized results.
+
+You can skip removing the meta data by changing the `strip_metadata` parameter to
+`false`. the JPEG optimizer will ignore the value.
+
+```ruby
+ImageOptimizer.new('path/to/file.png', strip_metadata: false).optimize
 ```
 
 ##### Use identify
