@@ -3,6 +3,7 @@ require 'image_optimizer/shell'
 require 'image_optimizer/image_optimizer_base'
 require 'image_optimizer/jpeg_optimizer'
 require 'image_optimizer/png_optimizer'
+require 'image_optimizer/gif_optimizer'
 
 class ImageOptimizer
   include Shell
@@ -17,6 +18,7 @@ class ImageOptimizer
     identify_format if options[:identify]
     JPEGOptimizer.new(path, options).optimize
     PNGOptimizer.new(path, options).optimize
+    GIFOptimizer.new(path, options).optimize
   end
 
 private

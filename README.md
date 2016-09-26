@@ -22,10 +22,12 @@ Tested against ruby 2.0.x, 2.1.x, 2.2.x, 2.3.x, and ruby-head
 
 2. OptiPNG, which can be installed from [sourceforge.net](http://optipng.sourceforge.net/)
 
+3. Gifsicle, which can be installed from [www.lcdf.org/gifsicle/](https://www.lcdf.org/gifsicle/)
+
 Or install the utilities via homebrew:
 
 ```bash
-$ brew install optipng jpegoptim
+$ brew install optipng jpegoptim gifsicle
 ```
 
 Then add this line to your application's Gemfile:
@@ -45,7 +47,7 @@ $ gem install image_optimizer
 
 ## Usage
 
-#### Optimize PNG or GIF formats:
+#### Optimize PNG formats:
 
 OptiPNG is a PNG optimizer that recompresses image files to a smaller size without losing any information and
 performs PNG integrity checks and corrections.
@@ -61,6 +63,14 @@ All jpegs will be progressively optimized for a better web experience
 
 ```ruby
 ImageOptimizer.new('path/to/file.jpg').optimize
+```
+
+#### Optimize GIF formats:
+
+Gifsicle is a command-line tool for creating, editing, and getting information about GIF images and animations. This stores only the changed portion of each frame, and can radically shrink your GIFs. You can also use transparency to make them even smaller. Gifsicle’s optimizer is pretty powerful, and usually reduces animations to within a couple bytes of the best commercial optimizers.
+
+```ruby
+ImageOptimizer.new('path/to/file.gif').optimize
 ```
 
 ## Optimization Options
@@ -107,6 +117,18 @@ You can skip removing the meta data by changing the `strip_metadata` parameter t
 
 ```ruby
 ImageOptimizer.new('path/to/file.png', strip_metadata: false).optimize
+```
+
+##### Custom GIF optimization quality
+
+By default, `gifsicle` is called with the `-O1` flag, which controls the level of
+optimization. It stores only the changed portion of each image. Other allowed flag are `-O2` (Also uses transparency to shrink the file further), `-O3` (Try several optimization methods , usually slower, sometimes better results)
+
+You can pass an optional `level` parameter to change this value. the JPEG
+optimizer will ignore the value.
+
+```ruby
+ImageOptimizer.new('path/to/file.gif', level: 3).optimize
 ```
 
 ##### Use identify
