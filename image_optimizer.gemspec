@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Julian Tescher"]
   gem.email         = ["jatescher@gmail.com"]
   gem.description   = %q{A simple image optimizer}
-  gem.summary       = %q{Simply optimize images via jpegoptim or OptiPNG}
+  gem.summary       = %q{Simply optimize images via jpegoptim or OptiPNG or Gifsicle}
   gem.homepage      = "https://github.com/jtescher/image_optimizer"
   gem.license       = 'MIT'
   gem.signing_key   = File.expand_path('~/.ssh/gem-private_key.pem') if $0 =~ /gem\z/

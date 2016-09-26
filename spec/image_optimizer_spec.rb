@@ -7,9 +7,10 @@ describe ImageOptimizer do
   describe '#optimize' do
     subject { ImageOptimizer.new(File.join(image_path), options) }
 
-    it 'delegates to jpeg and png optimizers' do
+    it 'delegates to jpeg, png and gif optimizers' do
       expect_any_instance_of(ImageOptimizer::JPEGOptimizer).to receive(:optimize)
       expect_any_instance_of(ImageOptimizer::PNGOptimizer).to receive(:optimize)
+      expect_any_instance_of(ImageOptimizer::GIFOptimizer).to receive(:optimize)
       subject.optimize
     end
   end
