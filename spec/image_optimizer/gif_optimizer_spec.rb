@@ -33,14 +33,14 @@ describe ImageOptimizer::GIFOptimizer do
       end
 
       context 'without optimization parameter' do
-        it 'optimizes the gif with level 7 optimization' do
+        it 'optimizes the gif with level 1 optimization' do
           expect(gif_optimizer).to receive(:system).with('/usr/local/bin/gifsicle', '-b', '-O1', '/path/to/file.gif')
           subject
         end
       end
 
       context 'with optimization parameter' do
-        let(:options) { { level: 2 } }
+        let(:options) { { gif_level: 2 } }
         it 'optimizes the gif with the requested optimization level' do
           expect(gif_optimizer).to receive(:system).with('/usr/local/bin/gifsicle', '-b', '-O2', '/path/to/file.gif')
           subject
