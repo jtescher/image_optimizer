@@ -9,7 +9,7 @@ class ImageOptimizer
     end
 
     def level
-      options[:level] || 1
+      options[:gif_level] || 1
     end
 
     def type
