@@ -24,10 +24,12 @@ Tested against ruby 2.0.x, 2.1.x, 2.2.x, 2.3.x, and ruby-head
 
 3. Gifsicle, which can be installed from [www.lcdf.org/gifsicle/](https://www.lcdf.org/gifsicle/)
 
+4. Pngquant, which can be installed from [pngquant.org]https://pngquant.org/
+
 Or install the utilities via homebrew:
 
 ```bash
-$ brew install optipng jpegoptim gifsicle
+$ brew install optipng jpegoptim gifsicle pngquant
 ```
 
 Then add this line to your application's Gemfile:
@@ -54,6 +56,13 @@ performs PNG integrity checks and corrections.
 
 ```ruby
 ImageOptimizer.new('path/to/file.png').optimize
+```
+
+Pngquant is a command-line utility and a library for lossy compression of PNG images.
+The conversion reduces file sizes significantly (often as much as 70%) and preserves full alpha transparency. Generated images are compatible with all modern web browsers, and have better fallback in IE6 than 24-bit PNGs.
+
+```ruby
+PNGQuantOptimizer.new('path/to/file.png').optimize
 ```
 
 #### Optimize JPEG formats:
@@ -106,6 +115,10 @@ optimizer will ignore the value.
 ```ruby
 ImageOptimizer.new('path/to/file.png', level: 3).optimize
 ```
+
+Pngquant is called with the '--skip-if-larger', '--speed 1','--force', '--verbose', '--ext .png' flags.
+This runs pngquant on all png files in the current directory and subdirectory and optimized them in place. Flag '--skip-if-larger' skips images which are  smaller. Flag '--ext .png' set custom extension (suffix) for output filename. By default -or8.png or -fs8.png is used.
+
 
 ##### Don't Remove metadata from PNG
 
