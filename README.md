@@ -24,7 +24,7 @@ Tested against ruby 2.0.x, 2.1.x, 2.2.x, 2.3.x, and ruby-head
 
 3. Gifsicle, which can be installed from [www.lcdf.org/gifsicle/](https://www.lcdf.org/gifsicle/)
 
-4. Pngquant, which can be installed from [pngquant.org]https://pngquant.org/
+4. Pngquant, which can be installed from [pngquant.org](https://pngquant.org/)
 
 Or install the utilities via homebrew:
 
