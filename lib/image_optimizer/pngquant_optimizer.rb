@@ -7,8 +7,6 @@ class ImageOptimizer
       flags = ['--skip-if-larger', '--speed 1',
                '--force', '--verbose', '--ext .png']
       flags << quantity
-      # flags << max_quantity if (0..100).include?(options[:quality])
-      # flags << if (0..100).include?(options[:quality]) ? quantity : max_quality
       flags << path
     end
 
