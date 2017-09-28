@@ -6,7 +6,7 @@ class ImageOptimizer
     def command_options
       flags = %W[-o#{level}]
       flags << strip_metadata if strip_metadata?
-      flags << quiet if options[:quiet]
+      flags << quiet if quiet?
       flags << path
     end
 

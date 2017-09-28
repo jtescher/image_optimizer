@@ -9,6 +9,15 @@ require 'image_optimizer/pngquant_optimizer'
 class ImageOptimizer
   include Shell
 
+  # Allow the +quiet+ flag to be set globally.
+  @@quiet = false
+  def self.quiet
+    @@quiet
+  end
+  def self.quiet=(value)
+    @@quiet = value
+  end
+
   attr_reader :path, :options
   def initialize(path, options = {})
     @path    = path
