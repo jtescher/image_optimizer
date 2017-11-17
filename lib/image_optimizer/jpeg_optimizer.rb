@@ -6,7 +6,7 @@ class ImageOptimizer
     def command_options
       flags = ['-f', '--strip-all', '--all-progressive']
       flags << max_quantity if (0..100).include?(options[:quality])
-      flags << quiet if options[:quiet]
+      flags << quiet if quiet?
       flags << path
     end
 

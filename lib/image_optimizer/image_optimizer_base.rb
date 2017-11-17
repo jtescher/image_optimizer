@@ -40,5 +40,9 @@ class ImageOptimizer
       ENV["#{bin_name.upcase}_BIN"] || which(bin_name)
     end
 
+    def quiet?
+      options[:quiet] || ImageOptimizer.quiet
+    end
+
   end
 end

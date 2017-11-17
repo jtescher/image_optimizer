@@ -93,6 +93,12 @@ Default is false.
 ImageOptimizer.new('path/to/file.jpg', quiet: true).optimize
 ```
 
+You can also enable quiet mode globally:
+
+```ruby
+ImageOptimizer.quiet = true
+```
+
 ##### Lossy JPEG optimization
 
 Pass an optional `quality` parameter to target a specific lossy JPG quality level (0-100), default is lossless

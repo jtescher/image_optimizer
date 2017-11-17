@@ -53,6 +53,17 @@ describe ImageOptimizer::JPEGOptimizer do
           subject
         end
       end
+
+      context 'with global quiet mode enabled' do
+        before { ImageOptimizer.quiet = true }
+        after { ImageOptimizer.quiet = false }
+
+        it 'sets quiet parameter on the command line' do
+          optimizer_options = %w[-f --strip-all --all-progressive --quiet /path/to/file.jpg]
+          expect(jpeg_optimizer).to receive(:system).with('/usr/local/bin/jpegoptim', *optimizer_options)
+          subject
+        end
+      end
     end
 
     context 'optimizing utility is not installed' do

@@ -40,6 +40,16 @@ describe ImageOptimizer::PNGOptimizer do
         end
       end
 
+      context 'with global quiet mode enabled' do
+        before { ImageOptimizer.quiet = true }
+        after { ImageOptimizer.quiet = false }
+
+        it 'sets quiet parameter on the command line' do
+          expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-strip all', '-quiet', '/path/to/file.png')
+          subject
+        end
+      end
+
       context 'without optimization parameter' do
         it 'optimizes the png with level 7 optimization' do
           expect(png_optimizer).to receive(:system).with('/usr/local/bin/optipng', '-o7', '-strip all', '/path/to/file.png')
