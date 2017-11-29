@@ -13,8 +13,8 @@ describe ImageOptimizer::PNGQuantOptimizer do
       end
 
       it 'optimizes the png' do
-        optimizer_options = %w[--skip-if-larger --speed\ 1 --force --verbose --ext\ .png --quality\ 100 /path/to/file.png]
-        expect(pngquant_optimizer).to receive(:system).with('/usr/local/bin/pngquant', *optimizer_options)
+        expected_cmd = "/usr/local/bin/pngquant --skip-if-larger --speed\ 1 --force --verbose --ext\ .png --quality\ 100 /path/to/file.png"
+        expect(pngquant_optimizer).to receive(:system).with(expected_cmd)
         subject
       end
 
@@ -28,18 +28,18 @@ describe ImageOptimizer::PNGQuantOptimizer do
         end
 
         it 'should optimize using the given path' do
-          optimizer_options = %w[--skip-if-larger --speed\ 1 --force --verbose --ext\ .png --quality\ 100 /path/to/file.png]
-          expect(pngquant_optimizer).to receive(:system).with(image_pngquant_bin_path, *optimizer_options)
+          expected_cmd = "#{image_pngquant_bin_path} --skip-if-larger --speed\ 1 --force --verbose --ext\ .png --quality\ 100 /path/to/file.png"
+          expect(pngquant_optimizer).to receive(:system).with(expected_cmd)
           subject
         end
       end
 
       context 'with quality parameter' do
-        let(:options) { { :quality => 100 } }
+        let(:options) { { :quality => 99 } }
 
         it 'optimizes the png with the quality' do
-          optimizer_options = %w[--skip-if-larger --speed\ 1 --force --verbose --ext\ .png --quality\ 100 /path/to/file.png]
-          expect(pngquant_optimizer).to receive(:system).with('/usr/local/bin/pngquant', *optimizer_options)
+          expected_cmd = "/usr/local/bin/pngquant --skip-if-larger --speed\ 1 --force --verbose --ext\ .png --quality\ 99 /path/to/file.png"
+          expect(pngquant_optimizer).to receive(:system).with(expected_cmd)
           subject
         end
       end
