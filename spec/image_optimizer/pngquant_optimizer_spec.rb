@@ -43,6 +43,16 @@ describe ImageOptimizer::PNGQuantOptimizer do
           subject
         end
       end
+
+      context 'with quiet parameter' do
+        let(:options) { { :quiet => true } }
+
+        it 'optimizes the png with the quality' do
+          expected_cmd = "/usr/local/bin/pngquant --skip-if-larger --speed\ 1 --force --ext\ .png --quality\ 100 /path/to/file.png"
+          expect(pngquant_optimizer).to receive(:system).with(expected_cmd)
+          subject
+        end
+      end
     end
 
     context 'optimizing utility is not installed' do
