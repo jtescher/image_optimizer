@@ -58,7 +58,7 @@ Pngquant is a command-line utility and a library for lossy compression of PNG im
 The conversion reduces file sizes significantly (often as much as 70%) and preserves full alpha transparency. Generated images are compatible with all modern web browsers, and have better fallback in IE6 than 24-bit PNGs.
 
 ```ruby
-PNGQuantOptimizer.new('path/to/file.png').optimize
+ImageOptimizer::PNGQuantOptimizer.new('path/to/file.png').optimize
 ```
 
 #### Optimize JPEG formats:
