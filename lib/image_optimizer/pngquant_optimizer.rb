@@ -3,13 +3,9 @@ class ImageOptimizer
 
   private
 
-    def perform_optimizations
-      system("#{optimizer_bin} #{command_options.join(' ')}")
-    end
-
     def command_options
-      flags = ['--skip-if-larger', '--speed 1',
-               '--force', '--verbose', '--ext .png']
+      flags = ['--skip-if-larger', '--speed=1',
+               '--force', '--verbose', '--ext=.png']
 
       flags -= ['--verbose'] if quiet?
       flags << quality
@@ -17,8 +13,8 @@ class ImageOptimizer
     end
 
     def quality
-      return "--quality 100" unless (0..100).include?(options[:quality])
-      "--quality #{options[:quality]}"
+      return "--quality=100" unless (0..100).include?(options[:quality])
+      "--quality=#{options[:quality]}"
     end
 
     def extensions
