@@ -12,11 +12,11 @@ class ImageOptimizer
                '--force', '--verbose', '--ext .png']
 
       flags -= ['--verbose'] if quiet?
-      flags << quantity
+      flags << quality
       flags << path
     end
 
-    def quantity
+    def quality
       return "--quality 100" unless (0..100).include?(options[:quality])
       "--quality #{options[:quality]}"
     end
