@@ -155,6 +155,14 @@ instead of the filename extension, default is false.
 ImageOptimizer.new('path/to/file.jpg', identify: true).optimize
 ```
 
+##### Ignore compression methods
+
+You can ignore optimization methods by passing an optional `ignore` parameter with the method name(s). For example, to compress a png ignoring the lossless compression method `optipng`:
+
+```ruby
+ImageOptimizer.new('path/to/file.png', ignore: :optipng).optimize
+```
+
 ## Set bin directories
 
 Optionally set binary directories with the `OPTIPNG_BIN`, `JPEGOPTIM_BIN` and `IDENTIFY_BIN` environment variables.

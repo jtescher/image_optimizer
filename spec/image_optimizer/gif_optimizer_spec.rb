@@ -46,6 +46,14 @@ describe ImageOptimizer::GIFOptimizer do
           subject
         end
       end
+
+      context 'with ignore parameter' do
+        let(:options) { { :ignore => :gifsicle } }
+        it 'does not optimize the gif' do
+          expect(gif_optimizer).not_to receive(:system)
+          subject
+        end
+      end
     end
 
 

@@ -72,6 +72,14 @@ describe ImageOptimizer::PNGOptimizer do
           subject
         end
       end
+
+      context 'with ignore parameter' do
+        let(:options) { { :ignore => :optipng } }
+        it 'does not optimize the png' do
+          expect(png_optimizer).not_to receive(:system)
+          subject
+        end
+      end
     end
 
 
