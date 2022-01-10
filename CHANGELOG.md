@@ -1,4 +1,7 @@
-## [1.8.0](https://github.com/jtescher/image_optimizer/releases/tag/v1.7.3) 2018-07-30
+## [1.9.0](https://github.com/jtescher/image_optimizer/releases/tag/v1.9.0) 2022-01-10
+* add ignore option for compression methods (#23)
+
+## [1.8.0](https://github.com/jtescher/image_optimizer/releases/tag/v1.8.0) 2018-07-30
 * Fix: space in file name will break PNGQuantOptimizer - https://github.com/jtescher/image_optimizer/pull/21
 
 ## [1.7.2](https://github.com/jtescher/image_optimizer/releases/tag/v1.7.2) 2018-01-10
