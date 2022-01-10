@@ -55,6 +55,14 @@ describe ImageOptimizer::PNGQuantOptimizer do
         end
       end
 
+      context 'with ignore parameter' do
+        let(:options) { { :ignore => :pngquant } }
+        it 'does not optimize the png' do
+          expect(pngquant_optimizer).not_to receive(:system)
+          subject
+        end
+      end
+
       context 'with space in file name' do
         let(:path) { '/path/to/file 2.png' }
 

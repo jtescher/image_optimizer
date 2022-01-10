@@ -9,6 +9,7 @@ class ImageOptimizer
     end
 
     def optimize
+      return if ignore?
       return unless correct_format?
 
       if optimizer_bin?
@@ -44,5 +45,12 @@ class ImageOptimizer
       options[:quiet] || ImageOptimizer.quiet
     end
 
+    def ignore?
+      ignore.include? bin_name
+    end
+
+    def ignore
+      options[:ignore] ? [options[:ignore]].flatten.map(&:to_s) : []
+    end
   end
 end

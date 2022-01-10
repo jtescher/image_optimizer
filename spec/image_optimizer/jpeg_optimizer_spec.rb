@@ -64,6 +64,14 @@ describe ImageOptimizer::JPEGOptimizer do
           subject
         end
       end
+
+      context 'with ignore parameter' do
+        let(:options) { { :ignore => :jpegoptim } }
+        it 'does not optimize the jpeg' do
+          expect(jpeg_optimizer).not_to receive(:system)
+          subject
+        end
+      end
     end
 
     context 'optimizing utility is not installed' do
